@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Divs</title>
+</head>
+<body>
+    <h2>Etch-a-Sketch</h2>
+    <button id="newGrid">Set Grid Size</button>
+    <div class="container"></div>
+  
+    <script>
+      const container = document.querySelector('.container');
+      const button = document.querySelector('#newGrid');
+  
+      function createGrid(squaresPerSide) {
+        container.innerHTML = '';
+  
+        const squareSize = 760 / squaresPerSide;
+  
+        for (let i = 0; i < squaresPerSide * squaresPerSide; i++) {
+          const square = document.createElement('div');
+          square.classList.add('square');
+          square.style.width = `${squareSize}px`;
+          square.style.height = `${squareSize}px`;
+  
+          square.addEventListener('mouseenter', () => {
+            let currentColor = square.style.backgroundColor;
+  
+            let rgba = currentColor.match(/rgba?\((\d+), (\d+), (\d+), ([\d.]+)\)/);
+            let r, g, b, alpha;
+  
+            if (rgba) {
+              [r, g, b, alpha] = rgba.slice(1).map(Number);
+  
+              alpha = Math.max(0, alpha - 0.1);
+            } else {
+              r = Math.floor(Math.random() * 256);
+              g = Math.floor(Math.random() * 256);
+              b = Math.floor(Math.random() * 256);
+              alpha = 0.9; // Start with 90% opacity
+            }
+  
+            square.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+          });
+  
+          container.appendChild(square);
+        }
+      }
+
+      button.addEventListener('click', () => {
+        let squaresPerSide = prompt('Enter the number squares not exceeding 100:', 16);
+ 
+        squaresPerSide = parseInt(squaresPerSide);
+        if (isNaN(squaresPerSide) || squaresPerSide < 1 || squaresPerSide > 100) {
+          alert('Please enter a number between 1 and 100.');
+          return;
+        }
+  
+        createGrid(squaresPerSide);
+      });
+  
+      createGrid(16);
+    </script>
+</body>
+</html>
